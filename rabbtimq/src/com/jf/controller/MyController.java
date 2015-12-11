@@ -1,4 +1,4 @@
-package com.jf.producer;
+package com.jf.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +20,9 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.jf.producer.impl.ProductServiceImpl;
+import com.jf.producer.service.ProductService;
 
 @Controller
 public class MyController {

@@ -1,6 +1,8 @@
-package com.jf.consumer;
+package com.jf.consumer.impl;
 
 import org.springframework.stereotype.Component;
+
+import com.jf.consumer.service.ConsumerService;
 
 public class ConsumerServiceImpl implements ConsumerService {
 

@@ -1,4 +1,4 @@
-package com.jf.consumer;
+package com.jf.consumer.service;
 
 public interface ConsumerService {
 

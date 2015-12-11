@@ -37,7 +37,7 @@
             <!--unmarshal>
                 <json library="Jackson" unmarshalTypeName="com.csi.fj.profile.testrmq.model.User"/>
             </unmarshal-->
-            <to uri="bean:com.jf.consumer.ConsumerServiceImpl"/>
+            <to uri="bean:com.jf.consumer.impl.ConsumerServiceImpl"/>
             <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
                 <redeliveryPolicy asyncDelayedRedelivery="true" maximumRedeliveries="3" redeliveryDelay="5000"/>

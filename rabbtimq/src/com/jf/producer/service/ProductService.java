@@ -1,4 +1,4 @@
-package com.jf.producer;
+package com.jf.producer.service;
 
 public interface ProductService {
 
