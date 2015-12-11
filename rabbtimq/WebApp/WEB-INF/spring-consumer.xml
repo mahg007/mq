@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="properties" location="ref:rabbit-props-profile"/>
+        <!-- 个人资料修改 -->
+        <route>
+            <from uri="rabbitmq://{{rabbit.server}}/mahgexchange?queue=mahg&amp;
+                vhost={{rabbit.vhost}}&amp;
+                username={{rabbit.user}}&amp;
+                password={{rabbit.password}}&amp;
+                exchangeType={{rabbit.exchangeType}}&amp;
+                routingKey={{rabbit.routingKey.mahg}}&amp;
+                concurrentConsumers=5&amp;
+                threadPoolSize=20&amp;
+                requestedChannelMax=10&amp;
+                requestedHeartbeat=60&amp;
+                connectionTimeout={{rabbit.connectionTimeout}}&amp;
+                deadLetterExchange={{rabbit.deadLetterExchange}}&amp;
+                deadLetterExchangeType={{rabbit.deadLetterExchangeType}}&amp;
+                deadLetterRoutingKey={{rabbit.deadLetterRoutingKey}}&amp;
+                deadLetterQueue={{rabbit.deadLetterQueue}}&amp;
+                automaticRecoveryEnabled=true&amp;
+                autoAck=false&amp;
+                autoDelete=false"/>
+            <!--unmarshal>
+                <json library="Jackson" unmarshalTypeName="com.csi.fj.profile.testrmq.model.User"/>
+            </unmarshal-->
+            <to uri="bean:com.jf.consumer.ConsumerServiceImpl"/>
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <redeliveryPolicy asyncDelayedRedelivery="true" maximumRedeliveries="3" redeliveryDelay="5000"/>
+            </onException>
+        </route>
+      
+      
+            
+    </camelContext>
+        
+
+     
+    <beans>
+        <util:properties id="rabbit-props-profile">
+            <prop key="rabbit.server">localhost</prop>
+            <prop key="rabbit.vhost">/</prop>
+            <prop key="rabbit.user">guest</prop>
+            <prop key="rabbit.password">guest</prop>
+            <prop key="rabbit.queue">mahg</prop>
+            <prop key="rabbit.exchange">mahgexchange</prop>
+            <prop key="rabbit.connectionTimeout">500</prop>
+            <prop key="rabbit.exchangeType">topic</prop>
+            <prop key="rabbit.routingKey.mahg">com.mahg.*</prop>
+            <prop key="rabbit.deadLetterExchange">dead.msgs</prop>
+            <prop key="rabbit.deadLetterExchangeType">topic</prop>
+            <prop key="rabbit.deadLetterRoutingKey">dead.letters</prop>
+            <prop key="rabbit.deadLetterQueue">dead.letters</prop>
+        </util:properties>
+    </beans>
+    
+    
+
+</beans>

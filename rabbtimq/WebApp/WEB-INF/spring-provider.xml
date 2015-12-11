@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    
+   <bean id="productService" class="com.jf.producer.ProductServiceImpl"></bean>
+
+    <beans>
+         <camelContext xmlns="http://camel.apache.org/schema/spring">
+         <propertyPlaceholder id="properties-od" location="ref:rabbit-props-od"/>
+            <route>
+                <from uri="direct:publish"/>
+                <!--需要添加camel-jackson才能用marshal>
+                    <json library="Jackson"/>
+                </marshal-->
+                <!-- 设置为持久化消息
+                <setHeader headerName="rabbitmq.DELIVERY_MODE">
+                    <constant>2</constant>
+                </setHeader>-->
+                <!-- 设置消息的过期时间
+                <setHeader headerName="rabbitmq.EXPIRATION">
+                    <constant>30000</constant>
+                </setHeader>-->
+                <setHeader headerName="rabbitmq.ROUTING_KEY">
+                    <constant>com.mahg.test</constant>
+                </setHeader>
+                <!--异步调用,线程池大小和channelPoolMaxSize一样大即可,如线程池更大,运行时会报错-->
+                <threads poolSize="10" maxPoolSize="10">
+                    <inOnly uri="rabbitmq://{{rabbit.server}}/mahgexchange?exchangeType=topic&amp;
+                    		vhost={{rabbit.vhost}}&amp;
+                            channelPoolMaxSize=10&amp;
+                            username={{rabbit.user}}&amp;
+                            password={{rabbit.password}}&amp;
+                            autoDelete=false&amp;
+                            declare=false"/>
+                </threads>
+            </route>
+        </camelContext>
+    </beans>
+    
+    <beans>
+        <util:properties id="rabbit-props-od">
+            <prop key="rabbit.server">localhost</prop>
+            <prop key="rabbit.vhost">/</prop>
+            <prop key="rabbit.user">guest</prop>
+            <prop key="rabbit.password">guest</prop>
+        </util:properties>
+    </beans>
+   
+</beans>
