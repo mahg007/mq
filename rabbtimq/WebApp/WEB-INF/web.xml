@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring-consumer.xml,/WEB-INF/spring-provider.xml</param-value>
+		<param-value>classpath:/spring/spring-*.xml</param-value>
 	</context-param>
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
@@ -21,7 +21,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring-common.xml</param-value>
+			<param-value>classpath:/spring/spring-mvc.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

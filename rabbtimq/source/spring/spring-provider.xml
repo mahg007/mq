@@ -10,7 +10,7 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     
-   <bean id="productService" class="com.jf.producer.ProductServiceImpl"></bean>
+  <!--  <bean id="productService" class="com.jf.producer.impl.ProductServiceImpl"></bean> -->
 
     <beans>
          <camelContext xmlns="http://camel.apache.org/schema/spring">
