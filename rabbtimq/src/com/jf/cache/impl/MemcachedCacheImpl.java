@@ -1,12 +1,12 @@
 package com.jf.cache.impl;
 
-import org.springframework.cache.Cache;
-
+import com.jf.cache.constant.CacheConstant;
+import com.jf.cache.service.ICache;
 import com.jf.cache.service.ICacheClient;
 
 import net.spy.memcached.MemcachedClient;
 
-public class MemcachedCacheImpl implements Cache, ICacheClient {
+public class MemcachedCacheImpl implements ICache, ICacheClient {
 	private MemcachedClient memcachedClient;
 
 	public void setMemcachedClient(MemcachedClient memcachedClient) {
@@ -14,25 +14,54 @@ public class MemcachedCacheImpl implements Cache, ICacheClient {
 	}
 
 	@Override
+	public Object get(String key) {
+
+		return memcachedClient.gets(key).getValue();
+	}
+
+	@Override
+	public void put(String key, Object vulue) {
+		memcachedClient.set(key, CacheConstant.DEFAULT_EXP, vulue);
+
+	}
+
+	@Override
+	public MemcachedClient getClient() {
+		return this.memcachedClient;
+	}
+
+	@Override
+	public void put(String key, int exp, Object vulue) {
+		memcachedClient.set(key, exp, vulue);
+
+	}
+
+	@Override
+	public void delete(String key) {
+		memcachedClient.delete(key);
+
+	}
+
+	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void evict(Object arg0) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public ValueWrapper get(Object arg0) {
+	public <T> T get(Object arg0, Class<T> arg1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> T get(Object arg0, Class<T> arg1) {
+	public ValueWrapper get(Object arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -52,7 +81,7 @@ public class MemcachedCacheImpl implements Cache, ICacheClient {
 	@Override
 	public void put(Object arg0, Object arg1) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -60,11 +89,5 @@ public class MemcachedCacheImpl implements Cache, ICacheClient {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public MemcachedClient getClient() {
-
-		return this.memcachedClient;
-	}
-
+    
 }
